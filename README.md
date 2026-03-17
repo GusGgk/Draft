@@ -31,8 +31,8 @@ Projeto desenvolvido como trabalho de conclusão de curso — Startup Draft.
 |--------|------------|
 | Front-end | React |
 | Back-end (API) | Node.js |
-| Back-end (Servidor) | PHP |
-| Banco de dados | A definir |
+| Back-end (Servidor) | PHP(Laravel) |
+| Banco de dados | MySQL(SQL) |
 
 ---
 
@@ -71,15 +71,16 @@ Consulte o [CONTRIBUTING.md](./CONTRIBUTING.md) para o guia completo de contribu
 ---
 
 ## Time
+* Importante, todos vão desenvolver em todas as áreas, porem terá uma responsabilidade maior nas seguintes áreas abaixo:
 
 | Nome | Papel |
 |------|-------|
-| — | Tech Lead / Git Manager |
-| — | Desenvolvedor(a) |
-| — | Desenvolvedor(a) |
-| — | Desenvolvedor(a) |
-| — | Desenvolvedor(a) |
-| — | Desenvolvedor(a) |
+| Gustavo Giacoia Kumagai | Git Manager and Tech Lead and Frontend Lead|
+| Mateus Dos Santos Furtado | Product Manager and Database Developer |
+| André Gritten | DataBase Lead and Developer |
+| Djames Ranunza | Documentation Lead and BackEnd Lead |
+| Eduardo Blasczak | Scrum Master and Backend Developer |
+| João Carlos Mezari | Responsable for the discord and Frontend Developer |
 
 ---
 
