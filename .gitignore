@@ -1,0 +1,27 @@
+# Dependências
+node_modules/
+vendor/
+
+# Variáveis de ambiente — NUNCA suba este arquivo
+.env
+.env.local
+.env.production
+
+# Build
+/build
+/dist
+/.next
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.user
