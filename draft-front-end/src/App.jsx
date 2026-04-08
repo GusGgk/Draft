@@ -18,8 +18,9 @@ function App() {
         <div className="auth-face front">
           <div className="brand-section">
             <img src={logo01} alt="Logo" className="logo" />
-            <h1 className="title">Bem-vindo de volta</h1>
-            <p className="subtitle">Faça login na sua conta para continuar</p>
+            <p className="subtitle">Onde o jogo começa!</p>
+            <h1 className="title">Bem-vindo ao Draft</h1>
+            
           </div>
 
           <form className="auth-form" onSubmit={(e) => e.preventDefault()}> {/**define para onde vai ao clicar o botão */}
