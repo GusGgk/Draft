@@ -1,119 +1,87 @@
 import { useState } from 'react'
-import logo01 from './assets/Imagens/1.png'
-import logo03 from './assets/Imagens/3.png'
+import logo01 from './assets/Imagens_logo/1.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isLogin, setIsLogin] = useState(true)
+
+  const toggleAuthMode = () => {
+    setIsLogin((prevMode) => !prevMode)
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className={`auth-container ${!isLogin ? 'register-active' : ''}`}>
+      <div className="auth-card">
+        {/* Face Frontal: Login */}
+        <div className="auth-face front">
+          <div className="brand-section">
+            <img src={logo01} alt="Logo" className="logo" />
+            <h1 className="title">Bem-vindo de volta</h1>
+            <p className="subtitle">Faça login na sua conta para continuar</p>
+          </div>
 
-      <div className="ticks"></div>
+          <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="input-group">
+              <label htmlFor="login-email">E-mail</label>
+              <input type="email" id="login-email" placeholder="Seu e-mail" required />
+            </div>
+            
+            <div className="input-group">
+              <label htmlFor="login-password">Senha</label>
+              <input type="password" id="login-password" placeholder="Sua senha" required />
+            </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+            <button type="submit" className="btn-primary">
+              Entrar
+            </button>
+          </form>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          <div className="toggle-section">
+            Não tem uma conta?
+            <button type="button" className="btn-toggle" onClick={toggleAuthMode}>
+              Cadastre-se
+            </button>
+          </div>
+        </div>
+
+        {/* Face Traseira: Cadastro */}
+        <div className="auth-face back">
+          <div className="brand-section">
+            <img src={logo01} alt="Logo" className="logo" />
+            <h1 className="title">Crie sua conta</h1>
+            <p className="subtitle">Preencha os dados abaixo para começar</p>
+          </div>
+
+          <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="input-group">
+              <label htmlFor="reg-name">Nome Completo</label>
+              <input type="text" id="reg-name" placeholder="Seu nome completo" required />
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="reg-email">E-mail</label>
+              <input type="email" id="reg-email" placeholder="Seu melhor e-mail" required />
+            </div>
+            
+            <div className="input-group">
+              <label htmlFor="reg-password">Senha</label>
+              <input type="password" id="reg-password" placeholder="Defina sua senha" required />
+            </div>
+
+            <button type="submit" className="btn-primary">
+              Criar Conta
+            </button>
+          </form>
+
+          <div className="toggle-section">
+            Já possui conta?
+            <button type="button" className="btn-toggle" onClick={toggleAuthMode}>
+              Faça login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
