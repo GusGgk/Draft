@@ -3,15 +3,17 @@ import logo01 from './assets/Imagens_logo/1.png'
 import './App.css'
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState(true) //a tela inicial vai ser de login (nao de cadastro)
 
-  const toggleAuthMode = () => {
-    setIsLogin((prevMode) => !prevMode)
+  const toggleAuthMode = () => { // função para alternar entre as telas de login e cadastro
+    setIsLogin((prevMode) => !prevMode) // inverte o valor de isLogin para mostrar a outra tela
   }
 
   return (
+
     <div className={`auth-container ${!isLogin ? 'register-active' : ''}`}>
-      <div className="auth-card">
+      <div className="auth-card"> {/* Card de autenticação que contém as duas faces (login e cadastro) */}
+        
         {/* Face Frontal: Login */}
         <div className="auth-face front">
           <div className="brand-section">
@@ -20,7 +22,7 @@ function App() {
             <p className="subtitle">Faça login na sua conta para continuar</p>
           </div>
 
-          <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="auth-form" onSubmit={(e) => e.preventDefault()}> {/**define para onde vai ao clicar o botão */}
             <div className="input-group">
               <label htmlFor="login-email">E-mail</label>
               <input type="email" id="login-email" placeholder="Seu e-mail" required />
@@ -52,7 +54,7 @@ function App() {
             <p className="subtitle">Preencha os dados abaixo para começar</p>
           </div>
 
-          <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="auth-form" onSubmit={(e) => e.preventDefault()}> {/**define para onde vai ao clicar o botão */}
             <div className="input-group">
               <label htmlFor="reg-name">Nome Completo</label>
               <input type="text" id="reg-name" placeholder="Seu nome completo" required />
