@@ -9,7 +9,7 @@ import Onboarding from './view/onboarding/Onboarding';
 import Perfil from './view/perfil/perfil';
 import EditarPerfil from './view/editarPerfil/editarPerfil';
 import Configuracoes from './view/configuracoesPage/configuracoes';
-import About from './about/About';
+import About from './view/about/About';
 
 const AppRoutes = () => {
     return (
@@ -20,7 +20,7 @@ const AppRoutes = () => {
             <Route path={routes.perfil} element={<Perfil />} />
             <Route path={routes.editarPerfil} element={<EditarPerfil />} />
             <Route path={routes.configuracoes} element={<Configuracoes />} />
-              <Route path={routes.about} element={<About />} />
+            <Route path={routes.about} element={<About />} />
 
             {/* Fallback for unknown routes */}
             <Route path="*" element={<App />} />

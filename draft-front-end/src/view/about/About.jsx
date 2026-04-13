@@ -2,7 +2,7 @@ import React from 'react';
 import './About.css';
 import Header from '../../common/header/Header';
 import Footer from '../../common/footer/Footer';
-import logo from '../assets/Imagens_logo/1.png';
+import logo from '../../assets/Imagens_logo/1.png';
 
 const About = () => {
     return (
