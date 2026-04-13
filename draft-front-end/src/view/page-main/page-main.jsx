@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './page-main.css';
-import Header from '../common/header/Header';
-import Footer from '../common/footer/Footer';
-import api from '../lib/axios';
-import routes from '../routes';
-import logo from '../assets/Imagens_logo/1.png';
+import Header from '../../common/header/Header';
+import Footer from '../../common/footer/Footer';
+import api from '../../lib/axios';
+import routes from '../../routes';
+import logo from '../../assets/Imagens_logo/1.png';
 
 const PageMain = () => {
     const navigate = useNavigate();
