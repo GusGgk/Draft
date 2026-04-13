@@ -5,6 +5,7 @@ const routes = {
     perfil: '/perfil',
     editarPerfil: '/editar-perfil',
     configuracoes: '/configuracoes',
+    about: '/sobre',
 };
 
 export default routes;
