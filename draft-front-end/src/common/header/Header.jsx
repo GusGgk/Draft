@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import routes from '../../routes';
 import './Header.css';
 import logo from '../../assets/Imagens_logo/1.png';
 
@@ -22,8 +24,8 @@ const Header = () => {
                 </div>
 
                 <nav className="desktop-nav">
-                    <a href="#home" className="nav-link">Início</a>
-                    <a href="#about" className="nav-link">Sobre</a>
+                    <Link to={routes.home} className="nav-link">Início</Link>
+                    <Link to={routes.about} className="nav-link">Sobre</Link>
                     <a href="#features" className="nav-link">Funcionalidades</a>
                     <a href="#contact" className="nav-link">Contato</a>
                 </nav>
