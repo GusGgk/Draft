@@ -1,58 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Draft Back-end
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API da plataforma Draft desenvolvida com Laravel.
 
-## About Laravel
+## Objetivo
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este servico concentra autenticacao, onboarding e busca de dados esportivos para consumo do front-end.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3+
+- Laravel 13
+- Laravel Sanctum
+- Filament
+- MySQL 8
 
-## Learning Laravel
+## Requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.3+
+- Composer 2+
+- Node.js 20+ e npm
+- Docker Desktop (opcional, recomendado para MySQL)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Configuracao Inicial
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+No diretorio draft-back-end:
 
-## Agentic Development
+~~~bash
+composer install
+copy .env.example .env
+php artisan key:generate
+~~~
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Banco de Dados
 
-```bash
-composer require laravel/boost --dev
+### Opcao recomendada: MySQL via Docker
 
-php artisan boost:install
-```
+~~~bash
+docker compose up -d
+~~~
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+O compose atual cria:
 
-## Contributing
+- host: 127.0.0.1
+- porta: 3307
+- database: xxxx
+- usuario: xxxx
+- senha: xxxx
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Ajuste o arquivo .env para usar MySQL, por exemplo:
 
-## Code of Conduct
+~~~env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3307
+DB_DATABASE=xxxx
+DB_USERNAME=xxxx
+DB_PASSWORD=xxxx
+~~~
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Migracoes e Seed
 
-## Security Vulnerabilities
+~~~bash
+php artisan migrate
+php artisan db:seed
+~~~
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Observacao importante:
+Se o seed falhar por tabela inexistente, rode migracao antes do seed.
 
-## License
+Usuario seedado para desenvolvimento:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- email: test@example.com
+- senha: password123
+
+## Executando em Desenvolvimento
+
+### API apenas
+
+~~~bash
+php artisan serve
+~~~
+
+### Ambiente completo do back-end
+
+Executa servidor, fila, logs e vite em paralelo:
+
+~~~bash
+composer run dev
+~~~
+
+API padrao:
+
+~~~text
+http://localhost:8000
+~~~
+
+## Assets
+
+~~~bash
+npm install
+npm run dev
+~~~
+
+Para build de assets:
+
+~~~bash
+npm run build
+~~~
+
+## Testes
+
+~~~bash
+composer run test
+~~~
+
+Ou diretamente:
+
+~~~bash
+php artisan test
+~~~
+
+## Endpoints Principais
+
+Publicos:
+
+- POST /api/register
+- POST /api/login
+
+Protegidos (auth:sanctum):
+
+- GET /api/user
+- POST /api/logout
+- POST /api/onboarding/atleta
+- POST /api/onboarding/instituicao
+- POST /api/onboarding/agente
+- GET /api/sports
+- GET /api/search/instituicoes?sport_id={id}
+- GET /api/search/atletas?parametros
+
+## Problemas Comuns
+
+Conexao com banco falhando:
+
+1. Verifique se o container MySQL esta ativo.
+2. Confira credenciais no .env.
+3. Valide se a porta 3307 esta livre na maquina.
+
+Erro de chave da aplicacao:
+
+~~~bash
+php artisan key:generate
+~~~
+
+Caches inconsistentes:
+
+~~~bash
+php artisan optimize:clear
+~~~
+
+## Referencias
+
+- [README da raiz](../README.md)
+- [Contributing.md](../Contributing.md)
