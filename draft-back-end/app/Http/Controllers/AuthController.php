@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Models\Atleta;
+use App\Models\Instituicao;
+use App\Models\Agente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,9 +25,11 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
-        return response()->json($user, 201);
+        return response()->json($this->userWithProfile($user), 201);
     }
 
     // Entrar no sistema
@@ -36,15 +41,17 @@ class AuthController extends Controller
             ]);
         }
 
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
-        return response()->json(Auth::user());
+        return response()->json($this->userWithProfile(Auth::user()));
     }
 
     // Ver quem está logado
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json($this->userWithProfile($request->user()));
     }
 
     // Sair do sistema
@@ -55,5 +62,45 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return response()->json(['message' => 'Deslogado com sucesso']);
+    }
+
+    /**
+     * Verifica se o usuário já tem perfil (atleta, instituição ou agente)
+     * e retorna os dados do usuário com as flags has_profile e user_type.
+     */
+    private function userWithProfile($user)
+    {
+        $userData = $user->toArray();
+
+        // Verificar em qual tabela o usuário está e trazer os dados do perfil
+        $atleta = Atleta::where('users_id', $user->id)->first();
+        if ($atleta) {
+            $userData['has_profile'] = true;
+            $userData['user_type'] = 'atleta';
+            $userData['profile'] = $atleta->toArray();
+            return $userData;
+        }
+
+        $instituicao = Instituicao::where('users_id', $user->id)->first();
+        if ($instituicao) {
+            $userData['has_profile'] = true;
+            $userData['user_type'] = 'instituicao';
+            $userData['profile'] = $instituicao->toArray();
+            return $userData;
+        }
+
+        $agente = Agente::where('users_id', $user->id)->first();
+        if ($agente) {
+            $userData['has_profile'] = true;
+            $userData['user_type'] = 'agente';
+            $userData['profile'] = $agente->toArray();
+            return $userData;
+        }
+
+        $userData['has_profile'] = false;
+        $userData['user_type'] = null;
+        $userData['profile'] = null;
+
+        return $userData;
     }
 }

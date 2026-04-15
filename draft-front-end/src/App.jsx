@@ -2,8 +2,11 @@ import { useState } from 'react'
 import logo01 from './assets/Imagens_logo/1.png'
 import './App.css'
 import api from './lib/axios'
+import { useNavigate } from 'react-router-dom'
+import routes from './routes'
 
 function App() {
+  const navigate = useNavigate()
   const [isLogin, setIsLogin] = useState(true) //a tela inicial vai ser de login (nao de cadastro)
 
   // estados para os campos de login
@@ -35,11 +38,25 @@ function App() {
         password_confirmation: password, // Laravel exige a confirmação da senha
       });
 
-      alert('Cadastro realizado com sucesso!')
       console.log(response.data);
+      // Redireciona para onboarding (cadastro sempre é novo usuário)
+      navigate(routes.onboarding);
       } catch (error) {
-        console.error('Erro no cadastro: ', error.response?.data);
-        alert("Erro ao cadastrar, verifique os dados e tente novamente.");
+        // Captura os detalhes do erro (ex: 422 Unprocessable Content)
+        const errorData = error.response?.data;
+        console.error('Erro no cadastro detalhado: ', errorData);
+        
+        let errorMsg = "Erro ao cadastrar, verifique os dados e tente novamente.";
+        
+        // Se houver erros de validação específicos (ex: email já existe, senha curta)
+        if (errorData?.errors) {
+          const firstErrorKey = Object.keys(errorData.errors)[0];
+          errorMsg = errorData.errors[firstErrorKey][0]; 
+        } else if (errorData?.message) {
+          errorMsg = errorData.message;
+        }
+
+        alert("Erro no cadastro: " + errorMsg);
       }
   }
 
@@ -54,8 +71,13 @@ function App() {
         email,
         password,
       });
-      alert('Login realizado com sucesso!')
       console.log(response.data);
+      // Verifica se o usuário já completou o perfil
+      if (response.data.has_profile) {
+        navigate(routes.home);
+      } else {
+        navigate(routes.onboarding);
+      }
       } catch (error) {
         console.error('Erro no login: ', error.response?.data);
         alert("Erro ao fazer login, verifique os dados e tente novamente.");

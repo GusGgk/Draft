@@ -21,6 +21,7 @@ class Atleta extends Model
         'nickname',
         'birth_date',
         'nationality',
+        'sport_id',
         'primary_sport',
         'position',
         'height_cm',
@@ -41,6 +42,15 @@ class Atleta extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'users_id', 'id');
+    }
+
+    /**
+     * Um atleta PERTENCE a uma modalidade esportiva.
+     * FK: atleta.sport_id → sports.id
+     */
+    public function sport(): BelongsTo
+    {
+        return $this->belongsTo(Sport::class, 'sport_id', 'id');
     }
 
     /**
