@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 // Rotas Públicas
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/sports', [SearchController::class, 'listSports']);
+
 
 // Rotas Protegidas (Exigem login via Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
@@ -21,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/onboarding/agente', [OnboardingController::class, 'storeAgente']);
 
     // Rotas de Busca
-    Route::get('/sports', [SearchController::class, 'listSports']);
+
     Route::get('/search/instituicoes', [SearchController::class, 'instituicoesBySport']);
     Route::get('/search/atletas', [SearchController::class, 'atletasByCharacteristics']);
 });
