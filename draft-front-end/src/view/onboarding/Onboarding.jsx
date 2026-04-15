@@ -10,16 +10,30 @@ const Onboarding = () => {
     const [step, setStep] = useState(1);
     const [userType, setUserType] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [sportsList, setSportsList] = useState([]); // Lista de esportes
+
+    // Buscar esportes da API ao montar o componente
+    React.useEffect(() => {
+        const fetchSports = async () => {
+            try {
+                const response = await api.get('/api/sports');
+                setSportsList(response.data);
+            } catch (error) {
+                console.error("Erro ao carregar os esportes:", error);
+            }
+        };
+        fetchSports();
+    }, []);
 
     // Formulários de cada tipo
     const [atletaForm, setAtletaForm] = useState({
-        nickname: '', birth_date: '', nationality: '', primary_sport: '',
+        nickname: '', birth_date: '', nationality: '', sport_id: '',
         position: '', height_cm: '', weight_kg: '', dominant_foot: '',
         dominant_hand: '', bio: '', endereco: '',
     });
 
     const [instituicaoForm, setInstituicaoForm] = useState({
-        organization_name: '', cnpj: '', institution_type: '', sports: '',
+        organization_name: '', cnpj: '', institution_type: '', sport_ids: [],
         founded_year: '', city: '', state: '', country: '', description: '', website: '', phone: '',
     });
 
@@ -32,6 +46,12 @@ const Onboarding = () => {
     const handleAtletaChange = (e) => setAtletaForm({ ...atletaForm, [e.target.name]: e.target.value });
     const handleInstituicaoChange = (e) => setInstituicaoForm({ ...instituicaoForm, [e.target.name]: e.target.value });
     const handleAgenteChange = (e) => setAgenteForm({ ...agenteForm, [e.target.name]: e.target.value });
+
+    // Handler específico para o multiselect da instituição
+    const handleInstituicaoSportsChange = (e) => {
+        const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+        setInstituicaoForm({ ...instituicaoForm, sport_ids: selectedOptions });
+    };
 
     // Selecionar tipo e ir para o passo 2
     const selectType = (type) => {
@@ -164,8 +184,15 @@ const Onboarding = () => {
                                         </div>
                                         <div className="form-group">
                                             <label>Esporte Principal *</label>
-                                            <input type="text" name="primary_sport" value={atletaForm.primary_sport}
-                                                onChange={handleAtletaChange} placeholder="Ex: Futebol" required />
+                                            <select name="sport_id" value={atletaForm.sport_id}
+                                                onChange={handleAtletaChange} required>
+                                                <option value="">Selecione um esporte</option>
+                                                {sportsList.map(sport => (
+                                                    <option key={sport.id} value={sport.id}>
+                                                        {sport.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="form-row">
@@ -249,8 +276,17 @@ const Onboarding = () => {
                                         </div>
                                         <div className="form-group">
                                             <label>Esportes</label>
-                                            <input type="text" name="sports" value={instituicaoForm.sports}
-                                                onChange={handleInstituicaoChange} placeholder="Ex: Futebol, Vôlei" />
+                                            <select name="sport_ids" multiple value={instituicaoForm.sport_ids}
+                                                onChange={handleInstituicaoSportsChange} className="multi-select" size="4">
+                                                {sportsList.map(sport => (
+                                                    <option key={sport.id} value={sport.id}>
+                                                        {sport.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <small className="help-text" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                                                Segure Ctrl (ou Cmd) para selecionar vários.
+                                            </small>
                                         </div>
                                     </div>
                                     <div className="form-row">

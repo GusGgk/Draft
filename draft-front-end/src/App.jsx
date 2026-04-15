@@ -42,8 +42,21 @@ function App() {
       // Redireciona para onboarding (cadastro sempre é novo usuário)
       navigate(routes.onboarding);
       } catch (error) {
-        console.error('Erro no cadastro: ', error.response?.data);
-        alert("Erro ao cadastrar, verifique os dados e tente novamente.");
+        // Captura os detalhes do erro (ex: 422 Unprocessable Content)
+        const errorData = error.response?.data;
+        console.error('Erro no cadastro detalhado: ', errorData);
+        
+        let errorMsg = "Erro ao cadastrar, verifique os dados e tente novamente.";
+        
+        // Se houver erros de validação específicos (ex: email já existe, senha curta)
+        if (errorData?.errors) {
+          const firstErrorKey = Object.keys(errorData.errors)[0];
+          errorMsg = errorData.errors[firstErrorKey][0]; 
+        } else if (errorData?.message) {
+          errorMsg = errorData.message;
+        }
+
+        alert("Erro no cadastro: " + errorMsg);
       }
   }
 

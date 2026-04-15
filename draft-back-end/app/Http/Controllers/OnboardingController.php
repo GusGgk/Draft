@@ -19,7 +19,7 @@ class OnboardingController extends Controller
             'nickname' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'nationality' => 'required|string|max:255',
-            'primary_sport' => 'required|string|max:255',
+            'sport_id' => 'required|exists:sports,id',
             'position' => 'nullable|string|max:255',
             'height_cm' => 'nullable|numeric',
             'weight_kg' => 'nullable|numeric',
@@ -31,12 +31,15 @@ class OnboardingController extends Controller
 
         $atleta = Atleta::create([
             ...$request->only([
-                'nickname', 'birth_date', 'nationality', 'primary_sport',
+                'nickname', 'birth_date', 'nationality', 'sport_id',
                 'position', 'height_cm', 'weight_kg', 'dominant_foot',
                 'dominant_hand', 'bio', 'endereco',
             ]),
             'users_id' => Auth::id(),
         ]);
+
+        // Carregar o nome do esporte para retornar no response
+        $atleta->load('sport');
 
         return response()->json([
             'message' => 'Perfil de atleta criado com sucesso!',
@@ -54,7 +57,8 @@ class OnboardingController extends Controller
             'organization_name' => 'required|string|max:255',
             'cnpj' => 'nullable|string|max:20',
             'institution_type' => 'required|string|max:255',
-            'sports' => 'nullable|string|max:500',
+            'sport_ids' => 'nullable|array',
+            'sport_ids.*' => 'exists:sports,id',
             'founded_year' => 'nullable|integer|min:1800|max:' . date('Y'),
             'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
@@ -65,12 +69,20 @@ class OnboardingController extends Controller
 
         $instituicao = Instituicao::create([
             ...$request->only([
-                'organization_name', 'cnpj', 'institution_type', 'sports',
+                'organization_name', 'cnpj', 'institution_type',
                 'founded_year', 'city', 'state', 'country',
                 'description', 'website',
             ]),
             'users_id' => Auth::id(),
         ]);
+
+        // Associar modalidades esportivas via tabela pivot
+        if ($request->has('sport_ids')) {
+            $instituicao->sportsRelation()->attach($request->sport_ids);
+        }
+
+        // Carregar os esportes para retornar no response
+        $instituicao->load('sportsRelation');
 
         return response()->json([
             'message' => 'Perfil de instituição criado com sucesso!',

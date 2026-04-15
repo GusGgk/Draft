@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/onboarding/atleta', [OnboardingController::class, 'storeAtleta']);
     Route::post('/onboarding/instituicao', [OnboardingController::class, 'storeInstituicao']);
     Route::post('/onboarding/agente', [OnboardingController::class, 'storeAgente']);
+
+    // Rotas de Busca
+    Route::get('/sports', [SearchController::class, 'listSports']);
+    Route::get('/search/instituicoes', [SearchController::class, 'instituicoesBySport']);
+    Route::get('/search/atletas', [SearchController::class, 'atletasByCharacteristics']);
 });

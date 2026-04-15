@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Instituicao extends Model
 {
@@ -32,5 +33,20 @@ class Instituicao extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'users_id', 'id');
+    }
+
+    /**
+     * Uma instituição tem MUITAS modalidades esportivas.
+     */
+    public function sportsRelation(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Sport::class,
+            'instituicao_sport',
+            'instituicao_id',
+            'sport_id',
+            'idInstituicao',
+            'id'
+        );
     }
 }

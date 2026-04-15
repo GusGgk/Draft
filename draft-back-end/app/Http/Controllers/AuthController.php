@@ -25,7 +25,9 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         return response()->json($this->userWithProfile($user), 201);
     }
@@ -39,7 +41,9 @@ class AuthController extends Controller
             ]);
         }
 
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         return response()->json($this->userWithProfile(Auth::user()));
     }
