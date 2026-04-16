@@ -101,6 +101,79 @@ npm run dev
      1. alert na tela
      2. log no console do DevTools
 
+## Passo a passo especifico para campos em Search
+
+Use esta trilha quando o professor pedir um campo novo dentro de uma busca.
+
+### Cenario recomendado no projeto
+
+1. Tela: [draft-front-end/src/view/page-main/page-main.jsx](draft-front-end/src/view/page-main/page-main.jsx)
+2. Busca de Atletas (perfil agente): formulario com `onSubmit`
+3. Busca de Instituicoes (perfil atleta): select com busca no `onChange`
+
+### Passo S1: adicionar filtro no estado
+
+Se a busca usa objeto de filtros, adicione um campo novo.
+
+```jsx
+const [atletaFilters, setAtletaFilters] = useState({
+    weight_min: '',
+    weight_max: '',
+    height_min: '',
+    height_max: '',
+    dominance: '',
+    proof_search_text: '',
+});
+```
+
+### Passo S2: adicionar input no bloco da busca
+
+```jsx
+<div className="search-field">
+    <label className="search-label">Palavra-chave (Prova)</label>
+    <input
+        type="text"
+        className="search-input"
+        placeholder="Ex: base, sub-20"
+        value={atletaFilters.proof_search_text}
+        onChange={(e) => setAtletaFilters({ ...atletaFilters, proof_search_text: e.target.value })}
+        onBlur={(e) => {
+            if (!String(e.target.value || '').trim()) return;
+            console.log('[Prova Autoria][Search] Palavra-chave:', e.target.value);
+            alert(`Filtro de busca aplicado: ${e.target.value}`);
+        }}
+    />
+</div>
+```
+
+### Passo S3: enviar o campo na busca
+
+No handler da busca, inclua o campo nos query params.
+
+```jsx
+if (atletaFilters.proof_search_text) {
+    params.append('proof_search_text', atletaFilters.proof_search_text);
+}
+```
+
+### Passo S4: validar sem banco
+
+1. Digite no campo da busca
+2. Saia do campo para disparar onBlur
+3. Clique no botao de buscar
+4. Confira no DevTools Network se `proof_search_text` foi enviado
+5. Se o backend ignorar esse parametro, a busca continua funcionando (sem quebrar)
+
+### Passo S5 (opcional): busca em tempo real com debounce
+
+Se quiser mostrar maturidade tecnica, aplique debounce de 300 a 500 ms antes de disparar a busca automatica.
+
+### Passo S6 (opcional): persistencia local do filtro de busca
+
+1. Salvar no localStorage no onBlur
+2. Reidratar estado da busca no useEffect
+3. Mostrar que o filtro permanece apos refresh
+
 ## Persistencia local (sem banco)
 
 Se quiser provar que o valor fica salvo sem backend, use localStorage.

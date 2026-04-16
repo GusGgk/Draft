@@ -245,3 +245,93 @@ Atleta::create([
     'users_id' => Auth::id(),
 ]);
 ```
+
+## 10) Template para Campo em Search (Formulario com Submit)
+
+### Estado
+
+```jsx
+const [searchFilters, setSearchFilters] = useState({
+  proof_search_text: '',
+  weight_min: '',
+  weight_max: '',
+});
+```
+
+### Input de busca
+
+```jsx
+<div className="search-field">
+  <label className="search-label">Palavra-chave (Prova)</label>
+  <input
+    type="text"
+    className="search-input"
+    placeholder="Digite um termo"
+    value={searchFilters.proof_search_text}
+    onChange={(e) => setSearchFilters({ ...searchFilters, proof_search_text: e.target.value })}
+    onBlur={(e) => {
+      if (!String(e.target.value || '').trim()) return;
+      console.log('[Prova Autoria][Search] Texto:', e.target.value);
+      alert(`Filtro de busca informado: ${e.target.value}`);
+    }}
+  />
+</div>
+```
+
+### Incluir no request da busca
+
+```jsx
+const params = new URLSearchParams();
+
+if (searchFilters.proof_search_text) {
+  params.append('proof_search_text', searchFilters.proof_search_text);
+}
+
+const response = await api.get(`/api/search/atletas?${params.toString()}`);
+```
+
+## 11) Template para Campo em Search (Busca imediata no onChange)
+
+```jsx
+<select
+  className="search-select"
+  value={searchFilters.proof_level}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSearchFilters({ ...searchFilters, proof_level: value });
+
+    console.log('[Prova Autoria][Search] Nivel:', value);
+    if (value) alert(`Nivel selecionado para busca: ${value}`);
+
+    // Disparo imediato da busca
+    handleSearchByLevel(value);
+  }}
+>
+  <option value="">Selecione</option>
+  <option value="basico">Basico</option>
+  <option value="intermediario">Intermediario</option>
+  <option value="avancado">Avancado</option>
+</select>
+```
+
+## 12) Template de Persistencia Local para Search
+
+```jsx
+useEffect(() => {
+  const saved = localStorage.getItem('proof_search_text');
+  if (!saved) return;
+
+  setSearchFilters((prev) => ({
+    ...prev,
+    proof_search_text: saved,
+  }));
+}, []);
+
+const handleSearchBlurSave = (value) => {
+  const normalized = String(value || '').trim();
+  if (!normalized) return;
+
+  localStorage.setItem('proof_search_text', normalized);
+  console.log('[Prova Autoria][Search] Filtro salvo localmente:', normalized);
+};
+```
