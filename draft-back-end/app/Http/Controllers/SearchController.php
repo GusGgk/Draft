@@ -7,9 +7,52 @@ use App\Models\Atleta;
 use App\Models\Instituicao;
 use App\Models\Sport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
+    /**
+     * Mapeia termos equivalentes de dominancia para pe e mao.
+     */
+    private function resolveDominanceTerms(string $dominance): array
+    {
+        $map = [
+            'destro' => [
+                'foot' => ['destro', 'direito'],
+                'hand' => ['destro', 'direita'],
+            ],
+            'direito' => [
+                'foot' => ['destro', 'direito'],
+                'hand' => ['destro', 'direita'],
+            ],
+            'direita' => [
+                'foot' => ['destro', 'direito'],
+                'hand' => ['destro', 'direita'],
+            ],
+            'canhoto' => [
+                'foot' => ['canhoto', 'esquerdo'],
+                'hand' => ['canhoto', 'esquerda'],
+            ],
+            'esquerdo' => [
+                'foot' => ['canhoto', 'esquerdo'],
+                'hand' => ['canhoto', 'esquerda'],
+            ],
+            'esquerda' => [
+                'foot' => ['canhoto', 'esquerdo'],
+                'hand' => ['canhoto', 'esquerda'],
+            ],
+            'ambidestro' => [
+                'foot' => ['ambidestro'],
+                'hand' => ['ambidestro'],
+            ],
+        ];
+
+        return $map[$dominance] ?? [
+            'foot' => [$dominance],
+            'hand' => [$dominance],
+        ];
+    }
+
     /**
      * Listar todas as modalidades esportivas disponíveis.
      * GET /api/sports
@@ -62,9 +105,11 @@ class SearchController extends Controller
             $query->where('height_cm', '<=', $request->height_max);
         }
         if ($request->filled('dominance')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('dominant_foot', $request->dominance)
-                  ->orWhere('dominant_hand', $request->dominance);
+                        $terms = $this->resolveDominanceTerms($request->dominance);
+
+                        $query->where(function ($q) use ($terms) {
+                                $q->whereIn(DB::raw('LOWER(dominant_foot)'), $terms['foot'])
+                                    ->orWhereIn(DB::raw('LOWER(dominant_hand)'), $terms['hand']);
             });
         }
 

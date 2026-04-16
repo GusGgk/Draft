@@ -487,8 +487,8 @@ const PageMain = () => {
                                         onChange={(e) => setAtletaFilters({...atletaFilters, dominance: e.target.value})}
                                     >
                                         <option value="">Todos</option>
-                                        <option value="destro">Destro</option>
-                                        <option value="canhoto">Canhoto</option>
+                                        <option value="direito">Destro (Direito)</option>
+                                        <option value="esquerdo">Canhoto (Esquerdo)</option>
                                         <option value="ambidestro">Ambidestro</option>
                                     </select>
                                 </div>
