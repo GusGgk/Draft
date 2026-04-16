@@ -115,6 +115,50 @@ const [formData, setFormData] = useState({
 </div>
 ```
 
+## 6.1) Template Input Select
+
+```jsx
+<div className="form-group full-width">
+  <label>Nivel de Prova (Select)</label>
+  <select
+    name="proof_level"
+    value={formData.proof_level}
+    onChange={(e) => setFormData({ ...formData, proof_level: e.target.value })}
+    onBlur={(e) => {
+      if (!e.target.value) return;
+      console.log('[Prova Autoria] Nivel selecionado:', e.target.value);
+      alert(`Nivel de prova selecionado: ${e.target.value}`);
+    }}
+  >
+    <option value="">Selecione</option>
+    <option value="basico">Basico</option>
+    <option value="intermediario">Intermediario</option>
+    <option value="avancado">Avancado</option>
+  </select>
+</div>
+```
+
+## 6.2) Template para Editar Perfil (setField)
+
+Use quando a tela tiver helper `setField(name, value)`, como em Editar Perfil.
+
+```jsx
+<div className="field">
+  <label>Campo de Prova (Editar Perfil)</label>
+  <input
+    type="text"
+    value={formData.proof_field || ''}
+    onChange={(e) => setField('proof_field', e.target.value)}
+    onBlur={(e) => {
+      if (!String(e.target.value || '').trim()) return;
+      console.log('[Prova Autoria] Editar Perfil:', e.target.value);
+      alert(`Editar Perfil - prova registrada: ${e.target.value}`);
+    }}
+    placeholder="Digite um valor"
+  />
+</div>
+```
+
 ## 7) Template de Handler Reutilizavel
 
 ```jsx
@@ -131,7 +175,42 @@ Uso:
 onBlur={(e) => handleProofFieldBlur('Codigo de prova', e.target.value)}
 ```
 
-## 8) Template de Persistencia Opcional (Somente se exigido)
+## 8) Template de Persistencia Local (Sem Banco)
+
+### Salvar no localStorage no blur
+
+```jsx
+const handleProofFieldBlurWithLocalSave = (key, label, value) => {
+  const normalized = String(value || '').trim();
+  if (!normalized) return;
+
+  localStorage.setItem(key, normalized);
+  console.log(`[Prova Autoria] ${label} salvo localmente:`, normalized);
+  alert(`${label} salvo localmente com sucesso: ${normalized}`);
+};
+```
+
+Uso:
+
+```jsx
+onBlur={(e) => handleProofFieldBlurWithLocalSave('proof_field', 'Campo de prova', e.target.value)}
+```
+
+### Reidratar estado ao abrir a tela
+
+```jsx
+useEffect(() => {
+  const saved = localStorage.getItem('proof_field');
+  if (!saved) return;
+
+  setFormData((prev) => ({
+    ...prev,
+    proof_field: saved,
+  }));
+}, []);
+```
+
+## 9) Template de Persistencia Opcional (Somente se exigido)
 
 ### Migration
 
