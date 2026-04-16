@@ -1,11 +1,10 @@
 # Prova de Autoria - Passo a Passo Universal
 
-Objetivo: adicionar um campo extra em qualquer formulario do projeto, sem obrigacao de salvar no banco.
+Objetivo: adicionar um campo extra em qualquer formulario do projeto, com persistencia no banco (migration, model e controller).
 
-Este guia cobre 3 niveis de persistencia:
-1. Sem persistencia: so alert e console.log
-2. Persistencia local no navegador: localStorage ou sessionStorage
-3. Persistencia no banco (opcional): quando o avaliador exigir
+Este guia cobre 2 camadas de demonstracao:
+1. Frontend: input novo no formulario com estado e onBlur
+2. Persistencia no banco: migration + model + controller (fluxo principal)
 
 ## Onde aplicar no projeto
 
@@ -19,7 +18,7 @@ Observacao importante sobre Editar Perfil:
 2. Prefira usar `onChange={(e) => setField('proof_field', e.target.value)}`
 3. O submit dessa tela salva no backend por padrao (PATCH `/api/profile/{tipo}`)
 
-## Passo a passo rapido (sem banco)
+## Passo a passo rapido (com banco)
 
 ### Passo 1: escolher formulario e tipo de campo
 
@@ -85,7 +84,7 @@ Use este formato quando estiver em [draft-front-end/src/view/editarPerfil/editar
 </div>
 ```
 
-### Passo 4: validar no navegador
+### Passo 4: validar no navegador (frontend)
 
 1. Rode o frontend:
 
@@ -100,6 +99,43 @@ npm run dev
 5. Confirme:
      1. alert na tela
      2. log no console do DevTools
+
+## Persistencia no banco (fluxo obrigatorio deste roteiro)
+
+### Passo 5: criar migration
+
+```bash
+cd draft-back-end
+php artisan make:migration add_proof_field_to_atleta_table --table=atleta
+```
+
+### Passo 6: editar migration
+
+```php
+Schema::table('atleta', function (Blueprint $table) {
+    $table->string('proof_field')->nullable()->after('endereco');
+});
+```
+
+### Passo 7: executar migration
+
+```bash
+php artisan migrate
+```
+
+### Passo 8: liberar no model e controller
+
+1. Model: incluir `proof_field` no `fillable`
+2. Controller: validar e incluir `proof_field` no create ou update
+3. Se houver Request dedicado (FormRequest), adicionar regra de validacao
+
+### Passo 9: validar persistencia real no banco
+
+1. Rode frontend e backend
+2. Preencha e envie o formulario
+3. Confira o payload no DevTools Network
+4. Confira no banco (ou tinker) se `proof_field` foi salvo
+5. Edite novamente o registro e confirme update do campo
 
 ## Passo a passo especifico para campos em Search
 
@@ -168,105 +204,22 @@ if (atletaFilters.proof_search_text) {
 
 Se quiser mostrar maturidade tecnica, aplique debounce de 300 a 500 ms antes de disparar a busca automatica.
 
-### Passo S6 (opcional): persistencia local do filtro de busca
-
-1. Salvar no localStorage no onBlur
-2. Reidratar estado da busca no useEffect
-3. Mostrar que o filtro permanece apos refresh
-
-## Persistencia local (sem banco)
-
-Se quiser provar que o valor fica salvo sem backend, use localStorage.
-
-### Passo 5 (opcional): salvar no localStorage no blur
-
-```jsx
-onBlur={(e) => {
-    const value = e.target.value;
-    if (!String(value || '').trim()) return;
-
-    localStorage.setItem('proof_field', value);
-    console.log('[Prova Autoria] Salvo localmente:', value);
-    alert(`Salvo localmente: ${value}`);
-}}
-```
-
-### Passo 6 (opcional): carregar valor salvo ao abrir tela
-
-```jsx
-useEffect(() => {
-    const saved = localStorage.getItem('proof_field');
-    if (!saved) return;
-    setFormData((prev) => ({ ...prev, proof_field: saved }));
-}, []);
-```
-
-Quando usar sessionStorage:
-1. Se o valor deve durar apenas na sessao atual do navegador
-2. Troque localStorage por sessionStorage
-
-## Persistencia no envio (sem criar coluna no banco)
-
-Se quiser enviar o valor no request so para rastreio temporario:
-1. Inclua proof_field no payload do post
-2. No backend, aceite e registre em log, sem salvar em tabela
-
-Observacao para Editar Perfil:
-1. Como a tela ja envia PATCH para salvar perfil, se `proof_field` estiver em `formData` ele tende a ir no payload
-2. Se nao quiser salvar no banco, remova `proof_field` dentro de `normalizePayload` antes de enviar
-
-Exemplo de log no backend:
-
-```php
-\Log::info('Prova de autoria recebida', [
-        'proof_field' => $request->input('proof_field'),
-        'user_id' => auth()->id(),
-]);
-```
-
-## Persistencia no banco (opcional, quando exigido)
-
-### Passo 7: criar migration
-
-```bash
-cd draft-back-end
-php artisan make:migration add_proof_field_to_atleta_table --table=atleta
-```
-
-### Passo 8: editar migration
-
-```php
-Schema::table('atleta', function (Blueprint $table) {
-        $table->string('proof_field')->nullable()->after('endereco');
-});
-```
-
-### Passo 9: executar migration
-
-```bash
-php artisan migrate
-```
-
-### Passo 10: liberar no model e controller
-
-1. Model: incluir proof_field no fillable
-2. Controller: validar e incluir proof_field no create ou update
-
 ## Roteiro de demonstracao em 5 minutos
 
 1. Abra um formulario existente
 2. Mostre o campo extra
 3. Digite valor e saia do campo
 4. Mostre alert e console.log
-5. Recarregue a pagina e prove valor persistido (se usou localStorage)
-6. Se pedirem banco: execute trilha opcional
+5. Envie o formulario e mostre no Network o `proof_field`
+6. Mostre no banco (ou tinker) que o valor foi persistido
+7. Edite novamente e mostre que o valor foi atualizado no banco
 
 Roteiro sugerido incluindo Editar Perfil:
 1. Onboarding: inserir um input `date` ou `email`
 2. Page Main: inserir um input `number` ou `text` de busca
 3. Editar Perfil: inserir um input `select` ou `password` com `setField`
 4. Mostrar onBlur (alert + console)
-5. Mostrar persistencia local (localStorage)
+5. Mostrar persistencia no banco (Network + banco)
 
 ## Checklist rapido para prova
 
@@ -275,17 +228,16 @@ Roteiro sugerido incluindo Editar Perfil:
 3. Campo novo visivel
 4. onBlur funcionando
 5. Log e alert funcionando
-6. Persistencia escolhida funcionando (nenhuma, local, ou banco)
+6. Persistencia no banco funcionando (migration aplicada e campo salvo)
 7. Se foi Editar Perfil, confirmar se o campo deve ou nao ir no PATCH
 
 ## Rollback rapido
 
-Sem banco:
+Frontend:
 1. Remova o input do JSX
 2. Remova o campo do estado
-3. Remova localStorage/sessionStorage usado para prova
 
-Com banco:
+Banco:
 
 ```bash
 cd draft-back-end
