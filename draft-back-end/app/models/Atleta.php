@@ -31,6 +31,8 @@ class Atleta extends Model
         'avaliability',
         'avatar_path',
         'bio',
+        'headline',
+        'instagram',
         'endereco',
         'users_id',
     ];

@@ -65,13 +65,15 @@ class OnboardingController extends Controller
             'country' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'website' => 'nullable|url|max:500',
+            'phone' => 'nullable|string|max:30',
+            
         ]);
 
         $instituicao = Instituicao::create([
             ...$request->only([
                 'organization_name', 'cnpj', 'institution_type',
                 'founded_year', 'city', 'state', 'country',
-                'description', 'website',
+                'description', 'website', 'phone',
             ]),
             'users_id' => Auth::id(),
         ]);

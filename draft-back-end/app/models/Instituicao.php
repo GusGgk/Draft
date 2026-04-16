@@ -22,8 +22,11 @@ class Instituicao extends Model
         'state',
         'country',
         'description',
+        'headline',
+        'instagram',
         'logo_path',
         'website',
+        'phone',
         'users_id',
     ];
 

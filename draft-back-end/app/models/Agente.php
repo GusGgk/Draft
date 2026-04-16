@@ -18,9 +18,11 @@ class Agente extends Model
         'sports_represented',
         'countries_active',
         'bio',
+        'headline',
         'avatar_path',
         'phone',
         'website',
+        'linkedin',
         'users_id',
     ];
 

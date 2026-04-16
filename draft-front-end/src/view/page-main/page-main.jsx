@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './page-main.css';
 import Header from '../../common/header/Header';
 import Footer from '../../common/footer/Footer';
@@ -272,6 +272,12 @@ const PageMain = () => {
                     </div>
 
                     <nav className="sidebar-nav">
+                        <Link to={routes.perfil} className="sidebar-link">
+                            <span className="sidebar-icon">👤</span> Meu Perfil
+                        </Link>
+                        <Link to={routes.editarPerfil} className="sidebar-link">
+                            <span className="sidebar-icon">✏️</span> Editar Perfil
+                        </Link>
                         <a href="#" className="sidebar-link">
                             <span className="sidebar-icon">📌</span> Itens salvos
                         </a>
@@ -487,8 +493,8 @@ const PageMain = () => {
                                         onChange={(e) => setAtletaFilters({...atletaFilters, dominance: e.target.value})}
                                     >
                                         <option value="">Todos</option>
-                                        <option value="destro">Destro</option>
-                                        <option value="canhoto">Canhoto</option>
+                                        <option value="direito">Destro (Direito)</option>
+                                        <option value="esquerdo">Canhoto (Esquerdo)</option>
                                         <option value="ambidestro">Ambidestro</option>
                                     </select>
                                 </div>

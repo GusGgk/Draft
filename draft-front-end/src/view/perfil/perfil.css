@@ -1,0 +1,126 @@
+.profile-page {
+	min-height: 100vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 32px 16px;
+	background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+}
+
+.profile-card-large {
+	width: min(960px, 100%);
+	background: var(--white);
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	box-shadow: var(--shadow-md);
+	padding: 24px;
+}
+
+.profile-header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 20px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid var(--border);
+}
+
+.profile-logo {
+	width: 54px;
+	height: 54px;
+	object-fit: contain;
+}
+
+.profile-header h1 {
+	font-size: 1.4rem;
+	color: var(--text-main);
+}
+
+.profile-header p {
+	color: var(--text-muted);
+	font-size: 0.9rem;
+	margin-top: 2px;
+}
+
+.profile-chip {
+	display: inline-flex;
+	margin-top: 8px;
+	border-radius: 999px;
+	background: rgba(150, 22, 54, 0.12);
+	color: var(--primary);
+	padding: 4px 10px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+.profile-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px 16px;
+	margin-bottom: 14px;
+}
+
+.profile-grid div {
+	background: #f8f9fb;
+	border-radius: 8px;
+	border: 1px solid var(--border);
+	padding: 10px;
+	font-size: 0.92rem;
+	color: var(--text-main);
+}
+
+.profile-bio {
+	border: 1px solid var(--border);
+	background: #fbfbfc;
+	border-radius: 10px;
+	padding: 12px;
+	margin-top: 8px;
+	white-space: pre-wrap;
+	line-height: 1.45;
+}
+
+.profile-actions {
+	margin-top: 20px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.btn-primary,
+.btn-secondary {
+	border: none;
+	border-radius: 10px;
+	padding: 10px 16px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.btn-primary {
+	background: var(--primary);
+	color: #fff;
+}
+
+.btn-primary:hover {
+	background: var(--primary-hover);
+}
+
+.btn-secondary {
+	background: #f1f3f5;
+	color: #212529;
+}
+
+.btn-secondary:hover {
+	background: #e9ecef;
+}
+
+@media (max-width: 720px) {
+	.profile-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.profile-actions {
+		flex-direction: column-reverse;
+	}
+}

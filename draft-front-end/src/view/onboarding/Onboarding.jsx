@@ -48,9 +48,16 @@ const Onboarding = () => {
     const handleAgenteChange = (e) => setAgenteForm({ ...agenteForm, [e.target.name]: e.target.value });
 
     // Handler específico para o multiselect da instituição
-    const handleInstituicaoSportsChange = (e) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-        setInstituicaoForm({ ...instituicaoForm, sport_ids: selectedOptions });
+    const handleInstituicaoSportToggle = (sportId) => {
+        const parsedSportId = Number(sportId);
+        const alreadySelected = instituicaoForm.sport_ids.includes(parsedSportId);
+
+        setInstituicaoForm({
+            ...instituicaoForm,
+            sport_ids: alreadySelected
+                ? instituicaoForm.sport_ids.filter((id) => id !== parsedSportId)
+                : [...instituicaoForm.sport_ids, parsedSportId],
+        });
     };
 
     // Selecionar tipo e ir para o passo 2
@@ -71,10 +78,16 @@ const Onboarding = () => {
             let endpoint;
 
             if (userType === 'atleta') {
-                data = atletaForm;
+                data = {
+                    ...atletaForm,
+                    sport_id: atletaForm.sport_id ? Number(atletaForm.sport_id) : '',
+                };
                 endpoint = '/api/onboarding/atleta';
             } else if (userType === 'instituicao') {
-                data = instituicaoForm;
+                data = {
+                    ...instituicaoForm,
+                    sport_ids: instituicaoForm.sport_ids.map(Number),
+                };
                 endpoint = '/api/onboarding/instituicao';
             } else {
                 data = agenteForm;
@@ -276,16 +289,20 @@ const Onboarding = () => {
                                         </div>
                                         <div className="form-group">
                                             <label>Esportes</label>
-                                            <select name="sport_ids" multiple value={instituicaoForm.sport_ids}
-                                                onChange={handleInstituicaoSportsChange} className="multi-select" size="4">
+                                            <div className="multi-select" style={{ maxHeight: '140px', overflowY: 'auto' }}>
                                                 {sportsList.map(sport => (
-                                                    <option key={sport.id} value={sport.id}>
-                                                        {sport.name}
-                                                    </option>
+                                                    <label key={sport.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', cursor: 'pointer' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={instituicaoForm.sport_ids.includes(Number(sport.id))}
+                                                            onChange={() => handleInstituicaoSportToggle(sport.id)}
+                                                        />
+                                                        <span>{sport.name}</span>
+                                                    </label>
                                                 ))}
-                                            </select>
+                                            </div>
                                             <small className="help-text" style={{ fontSize: '0.8rem', color: '#6b7280' }}>
-                                                Segure Ctrl (ou Cmd) para selecionar vários.
+                                                Selecione uma ou mais modalidades.
                                             </small>
                                         </div>
                                     </div>

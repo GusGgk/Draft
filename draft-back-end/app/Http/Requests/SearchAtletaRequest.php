@@ -6,6 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SearchAtletaRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('dominance')) {
+            $this->merge([
+                'dominance' => mb_strtolower(trim((string) $this->input('dominance'))),
+            ]);
+        }
+    }
+
     public function authorize(): bool
     {
         return true;
@@ -18,7 +27,7 @@ class SearchAtletaRequest extends FormRequest
             'weight_max' => 'nullable|numeric|min:0',
             'height_min' => 'nullable|numeric|min:0',
             'height_max' => 'nullable|numeric|min:0',
-            'dominance'  => 'nullable|string|in:destro,canhoto,ambidestro',
+            'dominance'  => 'nullable|string|in:destro,canhoto,ambidestro,direito,direita,esquerdo,esquerda',
         ];
     }
 }
