@@ -106,7 +106,7 @@ npm run dev
 
 ```bash
 cd draft-back-end
-php artisan make:migration add_proof_field_to_atleta_table --table=atleta
+php artisan make:migration add_new_camp --table=atleta
 ```
 
 ### Passo 6: editar migration
