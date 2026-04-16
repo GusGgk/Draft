@@ -24,4 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/sports', [SearchController::class, 'listSports']);
     Route::get('/search/instituicoes', [SearchController::class, 'instituicoesBySport']);
     Route::get('/search/atletas', [SearchController::class, 'atletasByCharacteristics']);
+
+    // Rotas de Perfil (edicao)
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::patch('/profile/atleta', [ProfileController::class, 'updateAtleta']);
+    Route::patch('/profile/instituicao', [ProfileController::class, 'updateInstituicao']);
+    Route::patch('/profile/agente', [ProfileController::class, 'updateAgente']);
 });
