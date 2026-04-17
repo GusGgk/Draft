@@ -113,7 +113,7 @@ php artisan make:migration add_new_camp --table=atleta
 
 ```php
 Schema::table('atleta', function (Blueprint $table) {
-    $table->string('proof_field')->nullable()->after('endereco');
+    $table->string('proof_field')->nullable();
 });
 ```
 

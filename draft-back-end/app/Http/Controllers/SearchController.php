@@ -86,7 +86,7 @@ class SearchController extends Controller
     /**
      * Buscar atletas por características físicas.
      * Usado pelo perfil Agente.
-     * GET /api/search/atletas?weight_min=&weight_max=&height_min=&height_max=&dominance=
+     * GET /api/search/atletas?weight_min=&weight_max=&height_min=&height_max=&dominance=&endereco=
      */
     public function atletasByCharacteristics(SearchAtletaRequest $request)
     {
@@ -112,6 +112,10 @@ class SearchController extends Controller
                                     ->orWhereIn(DB::raw('LOWER(dominant_hand)'), $terms['hand']);
             });
         }
+        /*
+        if ($request->filled('endereco')) {
+            $query->where('endereco', 'like', '%' . $request->endereco . '%');
+        } */
 
         $atletas = $query->get();
 

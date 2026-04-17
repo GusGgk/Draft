@@ -23,7 +23,7 @@ const PageMain = () => {
     const [atletaFilters, setAtletaFilters] = useState({
         weight_min: '', weight_max: '',
         height_min: '', height_max: '',
-        dominance: '',
+        dominance: '', //endereco:'',
     });
     const [atletaResults, setAtletaResults] = useState([]);
     const [atletaSearchLoading, setAtletaSearchLoading] = useState(false);
@@ -112,6 +112,7 @@ const PageMain = () => {
             if (atletaFilters.height_min) params.append('height_min', atletaFilters.height_min);
             if (atletaFilters.height_max) params.append('height_max', atletaFilters.height_max);
             if (atletaFilters.dominance) params.append('dominance', atletaFilters.dominance);
+            //if (atletaFilters.endereco) params.append('endereco', atletaFilters.endereco);
 
             const response = await api.get(`/api/search/atletas?${params.toString()}`);
             setAtletaResults(response.data.data);
@@ -498,6 +499,16 @@ const PageMain = () => {
                                         <option value="ambidestro">Ambidestro</option>
                                     </select>
                                 </div>
+                                {/*<div className="search-field">
+                                    <label className="search-label">Cidade</label>
+                                    <input type="text" className="search-input"
+                                    placeholder="Curitiba"
+                                    value={atletaFilters.endereco}
+                                    onChange={(e) => setAtletaFilters({...atletaFilters, endereco: e.target.value})}
+                                     />
+
+                                </div>
+                                */}
 
                                 <button type="submit" className="search-btn" disabled={atletaSearchLoading}>
                                     {atletaSearchLoading ? 'Buscando...' : '🔎 Buscar Atletas'}
@@ -520,6 +531,7 @@ const PageMain = () => {
                                                 <p className="result-detail">
                                                     {atleta.sport?.name || atleta.primary_sport || 'Esporte não definido'}
                                                     {atleta.position ? ` · ${atleta.position}` : ''}
+                                                   {/*{atleta.endereco ? ` · ${atleta.endereco}` : ''}*/} 
                                                 </p>
                                                 <p className="result-stats">
                                                     {atleta.height_cm ? `${atleta.height_cm}cm` : ''}
@@ -532,7 +544,7 @@ const PageMain = () => {
                                 </div>
                             )}
 
-                            {!atletaSearchLoading && atletaResults.length === 0 && atletaFilters.weight_min === '' && atletaFilters.height_min === '' && atletaFilters.dominance === '' && (
+                            {!atletaSearchLoading && atletaResults.length === 0 && atletaFilters.weight_min === '' && atletaFilters.height_min === '' && atletaFilters.dominance === '' && /*atletaFilters.endereco === '' &&*/(
                                 <p className="search-empty-hint">Preencha os filtros acima e clique em buscar</p>
                             )}
                         </div>

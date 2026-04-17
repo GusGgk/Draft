@@ -13,6 +13,12 @@ class SearchAtletaRequest extends FormRequest
                 'dominance' => mb_strtolower(trim((string) $this->input('dominance'))),
             ]);
         }
+
+        /*if ($this->filled('endereco')) {
+            $this->merge([
+                'endereco' => trim((string) $this->input('endereco')),
+            ]);
+        } */
     }
 
     public function authorize(): bool
@@ -28,6 +34,7 @@ class SearchAtletaRequest extends FormRequest
             'height_min' => 'nullable|numeric|min:0',
             'height_max' => 'nullable|numeric|min:0',
             'dominance'  => 'nullable|string|in:destro,canhoto,ambidestro,direito,direita,esquerdo,esquerda',
+            //'endereco'   => 'nullable|string|max:255',
         ];
     }
 }
